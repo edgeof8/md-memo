@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>md-memo — article to clean Markdown</title>
+  <meta name="description" content="One bookmarklet. Converts any web article into clean Markdown with YAML frontmatter. Ready for Obsidian, Notion, Logseq.">
+  <meta property="og:title" content="md-memo — article to clean Markdown">
+  <meta property="og:description" content="One click. Any article. Clean Markdown + YAML frontmatter.">
+  <meta property="og:url" content="https://edgeof8.github.io/md-memo/">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3rem;
+      padding: 4rem 2rem 5rem;
+      text-align: center;
+    }
+    .hero { display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+    .brand {
+      font-size: 4rem;
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      color: #3fb950;
+      text-shadow: 0 0 60px rgba(63, 185, 80, 0.35);
+    }
+    .tagline {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #e6edf3;
+      max-width: 480px;
+      line-height: 1.5;
+    }
+    .sub-tagline { color: #6e7681; font-size: 0.92rem; }
+    .features {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .feature-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.3rem 0.8rem;
+      border-radius: 99px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      border: 1px solid rgba(63,185,80,0.6);
+      background: rgba(63,185,80,0.08);
+      color: #3fb950;
+      letter-spacing: 0.01em;
+    }
+    .install {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.9rem;
+    }
+    .label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #6e7681;
+    }
+    .bookmarklet {
+      display: inline-block;
+      padding: 0.85rem 2.25rem;
+      background: #238636;
+      color: #ffffff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border-radius: 8px;
+      text-decoration: none;
+      border: 1px solid #2ea043;
+      cursor: grab;
+      user-select: none;
+      transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
+    }
+    .bookmarklet:hover {
+      background: #2ea043;
+      box-shadow: 0 0 28px rgba(46, 160, 67, 0.4);
+    }
+    .bookmarklet:active { cursor: grabbing; transform: scale(0.97); }
+    .drag-hint { font-size: 0.78rem; color: #484f58; margin-top: -0.25rem; }
+    .arrow {
+      font-size: 1.4rem;
+      animation: bounce 1.4s ease-in-out infinite;
+      color: #484f58;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-5px); }
+    }
+    .bookmarks-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      padding: 0.45rem 1rem;
+      font-size: 0.82rem;
+      color: #484f58;
+    }
+    .bookmarks-bar .slot {
+      color: #e6edf3;
+      background: #21262d;
+      border: 1px solid #30363d;
+      border-radius: 4px;
+      padding: 0.15rem 0.6rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+      max-width: 320px;
+      color: #484f58;
+      font-size: 0.78rem;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      border-top: 1px solid #21262d;
+    }
+    .copy-btn {
+      padding: 0.55rem 1.25rem;
+      background: transparent;
+      color: #8b949e;
+      font-size: 0.88rem;
+      border-radius: 8px;
+      border: 1px solid #30363d;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .copy-btn:hover { color: #e6edf3; border-color: #8b949e; }
+    .copy-btn.copied { color: #3fb950; border-color: #3fb950; }
+    .note {
+      max-width: 480px;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      font-size: 0.82rem;
+      color: #6e7681;
+      line-height: 1.6;
+    }
+    .footer { font-size: 0.82rem; color: #484f58; }
+    .footer a { color: #58a6ff; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+    .preview {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      overflow: hidden;
+      max-width: 620px;
+      width: 100%;
+    }
+    .preview-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0.5rem 0.85rem;
+      background: #0d1117;
+      border-bottom: 1px solid #21262d;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r { background: #ff5f57; }
+    .dot-y { background: #febc2e; }
+    .dot-g { background: #28c840; }
+    .preview-body {
+      padding: 1rem 1.1rem;
+      font-family: "SF Mono", "Cascadia Code", "Fira Mono", monospace;
+      font-size: 0.72rem;
+      line-height: 1.75;
+      color: #8b949e;
+      text-align: left;
+    }
+    .preview-body .fm  { color: #6e7681; }
+    .preview-body .key { color: #79c0ff; }
+    .preview-body .val { color: #a5d6ff; }
+    .preview-body .h1  { color: #e6edf3; font-weight: 700; }
+    .preview-body .md  { color: #8b949e; }
+  </style>
+</head>
+<body>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="brand">md-memo</div>
+    <p class="tagline">One click. Any article.<br> Clean Markdown with YAML frontmatter.</p>
+    <p class="sub-tagline">Ready for Obsidian • Notion • Logseq • VS Code</p>
+  </div>
+
+  <!-- Feature badges -->
+  <div class="features">
+    <span class="feature-badge">Readability</span>
+    <span class="feature-badge">Turndown.js</span>
+    <span class="feature-badge">YAML Frontmatter</span>
+    <span class="feature-badge">Zero Dependencies</span>
+  </div>
+
+  <!-- Output preview -->
+  <div class="preview">
+    <div class="preview-bar">
+      <div class="dot dot-r"></div>
+      <div class="dot dot-y"></div>
+      <div class="dot dot-g"></div>
+    </div>
+    <div class="preview-body">
+      <span class="fm">---</span><br>
+      <span class="key">title:</span> <span class="val">"The Future of AI Agents"</span><br>
+      <span class="key">source:</span> <span class="val">https://example.com/future-ai</span><br>
+      <span class="key">clipped:</span> <span class="val">2026-05-04</span><br>
+      <span class="fm">---</span><br><br>
+      <span class="h1"># The Future of AI Agents</span><br><br>
+      <span class="md">AI agents are becoming increasingly capable of handling complex, multi-step tasks...</span>
+    </div>
+  </div>
+
+  <!-- Install -->
+  <div class="install">
+    <div class="label">drag this to your bookmarks bar</div>
+    <a id="md-memo-link" class="bookmarklet" href="#">md-memo</a>
+    <div class="arrow">&#8595;</div>
+    <div class="bookmarks-bar">
+      &#128278; Bookmarks &nbsp;&nbsp; <span class="slot">md-memo</span> &nbsp;&nbsp; &#183;&#183;&#183;
+    </div>
+    <div class="drag-hint">then visit any article and click it</div>
+  </div>
+
+  <div class="divider">can't drag?</div>
+
+  <button class="copy-btn" id="copy-btn">Copy code — paste as bookmark URL</button>
+
+  <div class="note">
+    Uses Mozilla Readability to extract the main article, Turndown.js to convert to Markdown, and adds clean YAML frontmatter. Works on most news, blog, and documentation sites.
+  </div>
+
+  <p class="footer">
+    <a href="https://github.com/edgeof8">github.com/edgeof8</a>
+  </p>
+
+  <!-- bookmarklet source -->
+  <script id="md-memo-code" type="text/plain">javascript:(function(){var s=document.createElement('script');s.src='https://edgeof8.github.io/md-memo/md-memo.js?v='+Date.now();document.body.appendChild(s);})();</script>
+
+  <script>
+    const code = document.getElementById('md-memo-code').textContent.trim();
+    document.getElementById('md-memo-link').href = code;
+
+    document.getElementById('copy-btn').addEventListener('click', async () => {
+      await navigator.clipboard.writeText(code);
+      const btn = document.getElementById('copy-btn');
+      btn.textContent = '✓ Copied';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy code — paste as bookmark URL';
+        btn.classList.remove('copied');
+      }, 1500);
+    });
+  </script>
+
+</body>
+</html>
