@@ -230,7 +230,8 @@
         <div class="section">
             <h2>Features</h2>
             <ul class="feature-list">
-                <li>Zero-dependency, zero-install bookmarklet</li>
+                <li>Tiny loader bookmarklet — updates automatically, nothing to reinstall</li>
+                <li>Core logic served from <code>peek.js</code> on GitHub Pages</li>
                 <li>Extracts article content with readability AI</li>
                 <li>Converts to clean Markdown with YAML metadata</li>
                 <li>Copies instantly to clipboard</li>
@@ -298,26 +299,7 @@
 
     <script>
         function getBookmarkletCode() {
-            // This will be injected via fetch from bookmarklet.js
-            return `javascript:(function(){const CDN_READABILITY='https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.1/Readability.js';const CDN_TURNDOWN='https://cdn.jsdelivr.net/npm/turndown@7.1.1/dist/turndown.js';function showToast(e){const t=document.createElement('div');t.textContent=e,t.style.cssText='position:fixed;top:20px;right:20px;background:#4CAF50;color:white;padding:16px 24px;border-radius:4px;font-size:14px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.15);z-index:999999;animation:fadeIn .3s ease-in';const o=document.createElement('style');o.textContent='@keyframes fadeIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}@keyframes fadeOut{from{opacity:1}to{opacity:0}}',document.head.appendChild(o),document.body.appendChild(t),setTimeout((()=>{t.style.animation='fadeOut .3s ease-out',setTimeout((()=>t.remove()),300)}),2e3)}function showError(e){const t=document.createElement('div');t.textContent=e,t.style.cssText='position:fixed;top:20px;right:20px;background:#f44336;color:white;padding:16px 24px;border-radius:4px;font-size:14px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.15);z-index:999999;animation:fadeIn .3s ease-in',document.body.appendChild(t),setTimeout((()=>{t.style.animation='fadeOut .3s ease-out',setTimeout((()=>t.remove()),300)}),3e3)}function loadScript(e){return new Promise(((t,o)=>{const r=document.createElement('script');r.src=e,r.onload=t,r.onerror=()=>o(new Error(\`Failed to load \${e}\`)),document.head.appendChild(r)}))}function handleNoContent(){return\`---
-title: "\${document.title.replace(/"/g,'\\\\"')}"
-source: \${window.location.href}
-clipped: \${new Date().toISOString().split('T')[0]}
----
-
-# \${document.title}
-
-[Read original article](\${window.location.href})
-\`}async function extractArticle(){showToast('Extracting...');try{await Promise.all([loadScript(CDN_READABILITY),loadScript(CDN_TURNDOWN)]);if(void 0===Readability)throw new Error('Readability library failed to load');if(void 0===TurndownService)throw new Error('Turndown library failed to load');const e=document.cloneNode(!0),t=new Readability(e).parse();let o;if(o=t&&t.content?\`---
-title: "\${(t.title||document.title).replace(/"/g,'\\\\"')}"
-source: \${window.location.href}
-clipped: \${new Date().toISOString().split('T')[0]}
----
-
-# \${t.title||document.title}
-
-\${new TurndownService({headingStyle:'atx',codeBlockStyle:'fenced',bulletListMarker:'-'}).turndown(t.content)}
-\`:handleNoContent(),navigator.clipboard.writeText(o).then((()=>{showToast('✓ Copied to clipboard!')})).catch((t=>{const r=document.createElement('textarea');r.value=o,r.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:80%;max-width:600px;height:300px;padding:16px;border:2px solid #2196F3;border-radius:4px;font-family:monospace;font-size:12px;z-index:999999;box-shadow:0 4px 16px rgba(0,0,0,.25)';const a=document.createElement('div');a.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:999998';const s=document.createElement('button');s.textContent='Close & Copy Manually',s.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,calc(-50% + 160px));padding:8px 16px;background:#2196F3;color:white;border:none;border-radius:4px;cursor:pointer;font-size:14px;z-index:999999',s.onclick=()=>{r.remove(),a.remove(),s.remove()},document.body.appendChild(a),document.body.appendChild(r),document.body.appendChild(s),r.select(),r.focus(),showError('Clipboard access denied. Select text and copy manually.')}))}catch(e){e.message.includes('Failed to load')?showError('md-memo failed: Site CSP blocked script loading.'):showError(\`md-memo error: \${e.message}\`),console.error('md-memo error:',e)}}extractArticle()}})();`;
+            return "javascript:(function(){var s=document.createElement('script');s.src='https://edgeof8.github.io/peek/peek.js?v='+Date.now();document.body.appendChild(s);})();";
         }
 
         function generateBookmarklet() {

@@ -5,13 +5,13 @@ A zero-dependency, zero-install bookmarklet that converts any web article to cle
 ## 🎯 Features
 
 - **One-click extraction**: Click the bookmarklet, get Markdown to clipboard
+- **Auto-updating**: The bookmarklet is a tiny loader — core logic lives in `peek.js` on GitHub Pages and is fetched fresh each click, so you get improvements automatically without reinstalling
 - **Clean output**: Removes ads, navigation, and clutter using Mozilla Readability
 - **Markdown-first**: Converts HTML to clean Markdown with Turndown.js
 - **Metadata included**: Adds YAML frontmatter with title, source URL, and date
 - **No permissions**: Doesn't need browser extension permissions
 - **Privacy-respecting**: All processing happens client-side, nothing sent to servers
 - **Fast**: Extraction completes in under 1 second on typical broadband
-- **Works offline**: After first load, uses browser cache
 
 ## 🚀 Quick Start
 
@@ -63,11 +63,17 @@ This format is instantly compatible with:
 
 ## 🛠️ How It Works
 
-1. **Content Extraction**: Uses [@mozilla/readability](https://github.com/mozilla/readability) to identify main article content
-2. **HTML to Markdown**: Uses [Turndown.js](https://github.com/mixmark-io/turndown) to convert HTML to clean Markdown
-3. **Formatting**: Wraps output in YAML frontmatter with metadata
-4. **Clipboard**: Uses modern `navigator.clipboard` API to copy to clipboard
-5. **Feedback**: Shows toast notifications for status (extracting, copied, errors)
+The bookmarklet uses a **remote loader pattern**:
+
+1. **Loader**: The bookmarklet stored in your browser is a tiny script (~100 bytes) that injects `peek.js` from GitHub Pages at `https://edgeof8.github.io/peek/peek.js`
+2. **Dynamic fetch**: A cache-busting `?v=<timestamp>` query param ensures the latest version of `peek.js` is always loaded
+3. **Content Extraction**: `peek.js` uses [@mozilla/readability](https://github.com/mozilla/readability) to identify main article content
+4. **HTML to Markdown**: Uses [Turndown.js](https://github.com/mixmark-io/turndown) to convert HTML to clean Markdown
+5. **Formatting**: Wraps output in YAML frontmatter with metadata
+6. **Clipboard**: Uses modern `navigator.clipboard` API to copy to clipboard
+7. **Feedback**: Shows toast notifications for status (extracting, copied, errors)
+
+> **Auto-updates**: Because the core logic lives in `peek.js` on GitHub Pages, any improvements pushed to `main` are picked up automatically the next time you click the bookmarklet — no reinstall needed.
 
 ## ⚙️ Configuration
 
@@ -144,12 +150,13 @@ ${markdownContent}
 `;
 ```
 
-Then regenerate your bookmarklet using [setup.html](setup.html).
+Then push to `main` — the change goes live immediately since the bookmarklet always fetches the latest `peek.js`.
 
 ## 📦 Files Included
 
-- **bookmarklet.js** - Unminified source code (readable, good for customization)
-- **setup.html** - Interactive setup page (generates your personalized bookmarklet)
+- **peek.js** - The dynamically loaded core script, served from GitHub Pages (`https://edgeof8.github.io/peek/peek.js`)
+- **bookmarklet.js** - Readable/unminified source (reference copy; `peek.js` is what runs in production)
+- **setup.html** - Interactive setup page (installs the tiny loader bookmarklet)
 - **test.html** - Local testing playground
 - **README.md** - This file
 
