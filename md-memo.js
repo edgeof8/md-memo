@@ -2,29 +2,17 @@
   var CDN_READABILITY = 'https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.1/Readability.js';
   var CDN_TURNDOWN = 'https://cdn.jsdelivr.net/npm/turndown@7.1.1/dist/turndown.js';
 
-  function showToast(message) {
-    var toast = document.createElement('div');
-    toast.textContent = message;
-    toast.style.cssText = 'position:fixed;top:20px;right:20px;background:#4CAF50;color:white;padding:16px 24px;border-radius:4px;font-size:14px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.15);z-index:999999;animation:fadeIn .3s ease-in';
-    var style = document.createElement('style');
-    style.textContent = '@keyframes fadeIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}@keyframes fadeOut{from{opacity:1}to{opacity:0}}';
-    document.head.appendChild(style);
-    document.body.appendChild(toast);
-    setTimeout(function() {
-      toast.style.animation = 'fadeOut .3s ease-out';
-      setTimeout(function() { toast.remove(); }, 300);
-    }, 2000);
+  function showToast(message, bg) {
+    var t = document.createElement('div');
+    t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:' + (bg || '#6366f1') + ';color:#fff;padding:12px 24px;border-radius:8px;z-index:2147483647;font-family:system-ui;font-size:14px;box-shadow:0 10px 25px rgba(0,0,0,0.2);opacity:0;transition:0.3s;';
+    t.textContent = message;
+    document.body.appendChild(t);
+    setTimeout(function() { t.style.opacity = '1'; }, 10);
+    setTimeout(function() { t.style.opacity = '0'; setTimeout(function() { t.remove(); }, 300); }, 2500);
   }
 
   function showError(message) {
-    var toast = document.createElement('div');
-    toast.textContent = message;
-    toast.style.cssText = 'position:fixed;top:20px;right:20px;background:#f44336;color:white;padding:16px 24px;border-radius:4px;font-size:14px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.15);z-index:999999;animation:fadeIn .3s ease-in';
-    document.body.appendChild(toast);
-    setTimeout(function() {
-      toast.style.animation = 'fadeOut .3s ease-out';
-      setTimeout(function() { toast.remove(); }, 300);
-    }, 3000);
+    showToast(message, '#c62828');
   }
 
   function loadScript(src) {
