@@ -1,0 +1,34 @@
+{
+  "name": "md-memo",
+  "version": "1.0.0",
+  "description": "A zero-dependency bookmarklet that converts web articles to clean Markdown with YAML metadata",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/md-memo"
+  },
+  "keywords": [
+    "bookmarklet",
+    "web-clipper",
+    "markdown",
+    "obsidian",
+    "notion",
+    "logseq",
+    "pkm",
+    "knowledge-management",
+    "readability",
+    "turndown"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "files": [
+    "bookmarklet.js",
+    "setup.html",
+    "test.html",
+    "README.md",
+    "PRD.md"
+  ],
+  "scripts": {
+    "test": "echo 'Open test.html in your browser to test the bookmarklet'",
+    "setup": "echo 'Open setup.html in your browser to generate your personalized bookmarklet'"
+  }
+}

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>md-memo Bookmarklet Setup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 700px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .section h2 {
+            color: #444;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        label {
+            display: block;
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 13px;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-generate {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-reset {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-reset:hover {
+            background: #e0e0e0;
+        }
+
+        .output-section {
+            background: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 4px;
+            padding: 20px;
+            display: none;
+        }
+
+        .output-section.active {
+            display: block;
+        }
+
+        .output-section h3 {
+            color: #333;
+            font-size: 14px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .copy-link {
+            display: inline-block;
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 12px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 12px;
+        }
+
+        .copy-link:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .instructions {
+            background: #e3f2fd;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #1565c0;
+            line-height: 1.6;
+            margin-top: 15px;
+        }
+
+        .code-block {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 12px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 11px;
+            overflow-x: auto;
+            word-break: break-all;
+            margin: 10px 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .success-message {
+            background: #c8e6c9;
+            border-left: 4px solid #4CAF50;
+            padding: 12px;
+            border-radius: 4px;
+            color: #2e7d32;
+            font-size: 13px;
+            margin-bottom: 12px;
+            display: none;
+        }
+
+        .success-message.active {
+            display: block;
+        }
+
+        .feature-list {
+            list-style: none;
+            font-size: 13px;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .feature-list li {
+            margin-bottom: 8px;
+        }
+
+        .feature-list li:before {
+            content: "✓ ";
+            color: #4CAF50;
+            font-weight: bold;
+            margin-right: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📌 md-memo</h1>
+        <p class="subtitle">One-click web article clipper to Markdown</p>
+
+        <div class="section">
+            <h2>Features</h2>
+            <ul class="feature-list">
+                <li>Zero-dependency, zero-install bookmarklet</li>
+                <li>Extracts article content with readability AI</li>
+                <li>Converts to clean Markdown with YAML metadata</li>
+                <li>Copies instantly to clipboard</li>
+                <li>Works on most websites</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Setup</h2>
+            <p style="color: #666; font-size: 13px; margin-bottom: 20px;">
+                Customize your bookmarklet settings, then click "Generate Bookmarklet" to get your personalized version.
+            </p>
+
+            <label for="siteName">Site/Tool Name (for reference)</label>
+            <input type="text" id="siteName" placeholder="e.g., Obsidian, Notion, Logseq" value="">
+
+            <div class="button-group">
+                <button class="btn-generate" onclick="generateBookmarklet()">Generate Bookmarklet</button>
+                <button class="btn-reset" onclick="resetForm()">Reset</button>
+            </div>
+        </div>
+
+        <div class="output-section" id="outputSection">
+            <div class="success-message" id="successMessage">
+                ✓ Bookmarklet generated! Follow the instructions below to install it.
+            </div>
+
+            <h3>📍 How to Install</h3>
+            <div class="instructions">
+                <strong>Desktop (Chrome, Firefox, Safari, Edge):</strong>
+                <ol style="margin-left: 20px; margin-top: 8px;">
+                    <li>Right-click the button below and select <strong>"Bookmark Link"</strong></li>
+                    <li>Choose your Bookmarks Bar as the location</li>
+                    <li>Name it "md-memo" or similar</li>
+                </ol>
+                <br>
+                <strong>Mobile (Safari on iOS):</strong>
+                <ol style="margin-left: 20px;">
+                    <li>Copy the code below</li>
+                    <li>Create a new bookmark and paste into the URL field</li>
+                    <li>Name it "md-memo"</li>
+                </ol>
+            </div>
+
+            <h3 style="margin-top: 20px;">Your Bookmarklet</h3>
+            <a class="copy-link" id="bookmarkletLink" href="" onclick="copyToClipboard(event)">
+                📌 Copy md-memo Bookmarklet
+            </a>
+
+            <h3>Code Preview (Read-Only)</h3>
+            <div class="code-block" id="codePreview"></div>
+
+            <h3 style="margin-top: 20px;">📖 How to Use</h3>
+            <div class="instructions" style="background: #f3e5f5; border-left-color: #9c27b0; color: #6a1b9a;">
+                <ol style="margin-left: 20px; line-height: 1.8;">
+                    <li>Navigate to any article you want to save</li>
+                    <li>Click the <strong>md-memo</strong> bookmarklet from your bookmarks bar</li>
+                    <li>Wait for "Extracting..." notification</li>
+                    <li>See "✓ Copied to clipboard!" when done</li>
+                    <li>Paste into your Obsidian/Notion/Logseq vault</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function getBookmarkletCode() {
+            // This will be injected via fetch from bookmarklet.js
+            return `javascript:(function(){const CDN_READABILITY='https://cdn.jsdelivr.net/npm/@mozilla/readability@0.4.1/Readability.js';const CDN_TURNDOWN='https://cdn.jsdelivr.net/npm/turndown@7.1.1/dist/turndown.js';function showToast(e){const t=document.createElement('div');t.textContent=e,t.style.cssText='position:fixed;top:20px;right:20px;background:#4CAF50;color:white;padding:16px 24px;border-radius:4px;font-size:14px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.15);z-index:999999;animation:fadeIn .3s ease-in';const o=document.createElement('style');o.textContent='@keyframes fadeIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}@keyframes fadeOut{from{opacity:1}to{opacity:0}}',document.head.appendChild(o),document.body.appendChild(t),setTimeout((()=>{t.style.animation='fadeOut .3s ease-out',setTimeout((()=>t.remove()),300)}),2e3)}function showError(e){const t=document.createElement('div');t.textContent=e,t.style.cssText='position:fixed;top:20px;right:20px;background:#f44336;color:white;padding:16px 24px;border-radius:4px;font-size:14px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,.15);z-index:999999;animation:fadeIn .3s ease-in',document.body.appendChild(t),setTimeout((()=>{t.style.animation='fadeOut .3s ease-out',setTimeout((()=>t.remove()),300)}),3e3)}function loadScript(e){return new Promise(((t,o)=>{const r=document.createElement('script');r.src=e,r.onload=t,r.onerror=()=>o(new Error(\`Failed to load \${e}\`)),document.head.appendChild(r)}))}function handleNoContent(){return\`---
+title: "\${document.title.replace(/"/g,'\\\\"')}"
+source: \${window.location.href}
+clipped: \${new Date().toISOString().split('T')[0]}
+---
+
+# \${document.title}
+
+[Read original article](\${window.location.href})
+\`}async function extractArticle(){showToast('Extracting...');try{await Promise.all([loadScript(CDN_READABILITY),loadScript(CDN_TURNDOWN)]);if(void 0===Readability)throw new Error('Readability library failed to load');if(void 0===TurndownService)throw new Error('Turndown library failed to load');const e=document.cloneNode(!0),t=new Readability(e).parse();let o;if(o=t&&t.content?\`---
+title: "\${(t.title||document.title).replace(/"/g,'\\\\"')}"
+source: \${window.location.href}
+clipped: \${new Date().toISOString().split('T')[0]}
+---
+
+# \${t.title||document.title}
+
+\${new TurndownService({headingStyle:'atx',codeBlockStyle:'fenced',bulletListMarker:'-'}).turndown(t.content)}
+\`:handleNoContent(),navigator.clipboard.writeText(o).then((()=>{showToast('✓ Copied to clipboard!')})).catch((t=>{const r=document.createElement('textarea');r.value=o,r.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:80%;max-width:600px;height:300px;padding:16px;border:2px solid #2196F3;border-radius:4px;font-family:monospace;font-size:12px;z-index:999999;box-shadow:0 4px 16px rgba(0,0,0,.25)';const a=document.createElement('div');a.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:999998';const s=document.createElement('button');s.textContent='Close & Copy Manually',s.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,calc(-50% + 160px));padding:8px 16px;background:#2196F3;color:white;border:none;border-radius:4px;cursor:pointer;font-size:14px;z-index:999999',s.onclick=()=>{r.remove(),a.remove(),s.remove()},document.body.appendChild(a),document.body.appendChild(r),document.body.appendChild(s),r.select(),r.focus(),showError('Clipboard access denied. Select text and copy manually.')}))}catch(e){e.message.includes('Failed to load')?showError('md-memo failed: Site CSP blocked script loading.'):showError(\`md-memo error: \${e.message}\`),console.error('md-memo error:',e)}}extractArticle()}})();`;
+        }
+
+        function generateBookmarklet() {
+            const code = getBookmarkletCode();
+            const link = document.getElementById('bookmarkletLink');
+            link.href = code;
+
+            const codePreview = document.getElementById('codePreview');
+            codePreview.textContent = code;
+
+            const outputSection = document.getElementById('outputSection');
+            outputSection.classList.add('active');
+
+            const successMessage = document.getElementById('successMessage');
+            successMessage.classList.add('active');
+            setTimeout(() => successMessage.classList.remove('active'), 4000);
+        }
+
+        function copyToClipboard(event) {
+            event.preventDefault();
+            const code = getBookmarkletCode();
+            navigator.clipboard.writeText(code).then(() => {
+                const btn = event.target;
+                const original = btn.textContent;
+                btn.textContent = '✓ Copied!';
+                setTimeout(() => {
+                    btn.textContent = original;
+                }, 2000);
+            });
+        }
+
+        function resetForm() {
+            document.getElementById('siteName').value = '';
+            document.getElementById('outputSection').classList.remove('active');
+        }
+
+        // Auto-generate on page load
+        window.addEventListener('load', () => {
+            generateBookmarklet();
+        });
+    </script>
+</body>
+</html>

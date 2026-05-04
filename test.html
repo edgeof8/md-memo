@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>md-memo Test Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fafafa;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 0;
+            margin-bottom: 40px;
+            border-radius: 8px;
+        }
+
+        header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .article {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+
+        .article h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .article h3 {
+            color: #764ba2;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .article p {
+            margin-bottom: 16px;
+            text-align: justify;
+        }
+
+        .article ul,
+        .article ol {
+            margin-left: 20px;
+            margin-bottom: 16px;
+        }
+
+        .article li {
+            margin-bottom: 8px;
+        }
+
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', monospace;
+            font-size: 13px;
+        }
+
+        pre {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 16px;
+            overflow-x: auto;
+            margin: 16px 0;
+            font-family: 'Monaco', monospace;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        blockquote {
+            border-left: 4px solid #667eea;
+            padding-left: 16px;
+            margin: 20px 0;
+            color: #666;
+            font-style: italic;
+        }
+
+        a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .test-banner {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 16px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .nav {
+            margin-bottom: 20px;
+        }
+
+        .nav a {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .nav a:hover {
+            background: #764ba2;
+            text-decoration: none;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: #666;
+            margin: 0;
+        }
+
+        hr {
+            border: none;
+            height: 1px;
+            background: #eee;
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧪 md-memo Test Page</h1>
+            <p>Use this page to test the md-memo bookmarklet. Click the bookmarklet while on this page to extract and convert to Markdown.</p>
+        </header>
+
+        <div class="nav">
+            <a href="setup.html">← Back to Setup</a>
+            <a href="README.md">📖 Read README</a>
+            <a href="#" onclick="alert('Click your md-memo bookmarklet now to test extraction!'); return false;">📌 Test Bookmarklet</a>
+        </div>
+
+        <div class="test-banner">
+            <strong>💡 How to test:</strong> After installing the bookmarklet, click it now to extract this article. The content below should be converted to Markdown and copied to your clipboard!
+        </div>
+
+        <article class="article">
+            <h2>Understanding the Future of Knowledge Management</h2>
+
+            <p>In an age of information overload, the way we capture, organize, and retrieve knowledge has become more critical than ever. The emergence of tools like Obsidian, Notion, and Logseq has revolutionized how personal knowledge management works. These platforms share a common philosophy: your notes should be yours, stored locally, and interconnected in ways that foster discovery and learning.</p>
+
+            <h3>The Problem with Traditional Note-Taking</h3>
+
+            <p>For decades, note-taking has been fragmented. We clip articles to browser extensions, emails disappear into inboxes, and screenshots pile up in download folders. The process of turning web content into usable notes is tedious:</p>
+
+            <ol>
+                <li>Find an article worth saving</li>
+                <li>Copy relevant portions manually</li>
+                <li>Paste into a note-taking app</li>
+                <li>Manually format and add metadata</li>
+                <li>Hope the links still work later</li>
+            </ol>
+
+            <p>This workflow is broken. It's slow, error-prone, and loses context along the way.</p>
+
+            <h3>Introducing a Better Approach</h3>
+
+            <p>What if capturing web content could be a single click? What if the tool required no installation, no permissions, and no data collection? This is where modern bookmarklets shine.</p>
+
+            <p>A bookmarklet is a tiny JavaScript program stored as a bookmark. When clicked, it executes directly in your browser. No extension needed. No server processing your data. Just pure client-side automation.</p>
+
+            <h3>The Technical Innovation</h3>
+
+            <p>The beauty of combining modern JavaScript APIs with established libraries is remarkable:</p>
+
+            <pre><code>// Pseudocode for web clipping
+1. Clone the DOM to avoid mutating the page
+2. Run Readability to extract main content
+3. Convert HTML to Markdown using Turndown
+4. Add YAML frontmatter for metadata
+5. Copy to clipboard with navigator.clipboard API
+6. Show visual feedback to user</code></pre>
+
+            <p>Each step is optimized for speed and reliability. Libraries are loaded from a CDN, so after the first run, they're cached by your browser.</p>
+
+            <h3>Why This Matters for Knowledge Workers</h3>
+
+            <blockquote>
+                The cost of capturing knowledge should approach zero. Only then can we focus on what matters: thinking and creating.
+            </blockquote>
+
+            <p>Here are some key benefits:</p>
+
+            <ul>
+                <li><strong>Speed:</strong> Extraction completes in under 1 second</li>
+                <li><strong>Simplicity:</strong> No setup, no configuration needed</li>
+                <li><strong>Privacy:</strong> Everything stays on your computer</li>
+                <li><strong>Flexibility:</strong> Works with any Markdown-based tool</li>
+                <li><strong>Reliability:</strong> No third-party dependencies or accounts</li>
+            </ul>
+
+            <h3>Real-World Use Cases</h3>
+
+            <p>Consider the researcher gathering academic papers:</p>
+
+            <blockquote>
+                "I used to spend 10 minutes per article manually copying citations and key passages. Now I click once, and the article lands in my Obsidian vault with proper metadata. I save hours every week."
+            </blockquote>
+
+            <p>Or the developer bookmarking technical documentation:</p>
+
+            <blockquote>
+                "API docs are ephemeral—they change or disappear. I now keep local Markdown copies. The bookmarklet makes this effortless."
+            </blockquote>
+
+            <h3>The Future of Information Capture</h3>
+
+            <p>As we move toward more distributed, privacy-respecting tooling, bookmarklets represent a sweet spot: powerful enough to solve real problems, simple enough that anyone can use them, and respectful of user privacy and autonomy.</p>
+
+            <p>The future of knowledge management isn't about feature-rich cloud services. It's about owning your data, controlling how it's organized, and having the freedom to move it wherever you want, whenever you want.</p>
+
+            <h3>Getting Started</h3>
+
+            <p>Ready to try it? Head over to the <a href="setup.html">setup page</a> to generate your personalized bookmarklet. Installation takes under a minute, and you'll immediately start clipping with confidence.</p>
+
+            <hr>
+
+            <p><strong>Last updated:</strong> May 4, 2026</p>
+        </article>
+
+        <div class="features">
+            <div class="feature-card">
+                <h4>⚡ Lightning Fast</h4>
+                <p>Sub-second execution. Libraries are cached after first use.</p>
+            </div>
+            <div class="feature-card">
+                <h4>🔒 Privacy First</h4>
+                <p>All processing happens in your browser. No data sent anywhere.</p>
+            </div>
+            <div class="feature-card">
+                <h4>📝 Clean Markdown</h4>
+                <p>Removes ads, navbars, and clutter. Pure content only.</p>
+            </div>
+            <div class="feature-card">
+                <h4>🎯 One Click</h4>
+                <p>From reading an article to having it in your vault in seconds.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
